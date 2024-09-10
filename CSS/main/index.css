@@ -1,0 +1,21 @@
+.overlay {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.4); /* Màu đen với độ trong suốt 50% */
+    position: fixed;
+    top: 0;
+    bottom: 0;
+
+    left: 0;
+    right: 0;
+    z-index: 1;
+    /* pointer-events: none; */
+}
+.overlay.active {
+    display: block;
+}
+
+#main {
+    padding-top: 90px;
+    overflow: hidden;
+    padding-bottom: 30px;
+}
