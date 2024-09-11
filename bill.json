@@ -1,0 +1,14 @@
+{
+    "bill": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "amount": 100
+        },
+        {
+            "id": 2,
+            "name": "Jane Doe",
+            "amount": 200
+        }
+    ]
+}

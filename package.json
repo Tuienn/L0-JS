@@ -1,0 +1,10 @@
+{
+    "dependencies": {
+        "json-server": "^1.0.0-beta.2",
+        "yarn": "^1.22.22"
+    },
+    "scripts": {
+        "start": "npx json-server bill.json",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}
