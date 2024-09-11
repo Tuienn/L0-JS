@@ -1,14 +1,60 @@
 {
-    "bill": [
-        {
-            "id": 1,
-            "name": "John Doe",
-            "amount": 100
-        },
-        {
-            "id": 2,
-            "name": "Jane Doe",
-            "amount": 200
-        }
-    ]
+  "bill": [
+    {
+      "id": "3silE",
+      "name": "f d",
+      "time": "11/09/2024",
+      "itemNumbers": 2,
+      "totalQuantity": 2,
+      "totalPrice": 3300
+    },
+    {
+      "id": "8Vryq",
+      "name": "s s",
+      "time": "11/09/2024",
+      "itemNumbers": 2,
+      "totalQuantity": 2,
+      "totalPrice": 3300
+    },
+    {
+      "id": "M2qaF",
+      "name": "s d",
+      "time": "11/09/2024",
+      "itemNumbers": 3,
+      "totalQuantity": 10,
+      "totalPrice": 11800
+    },
+    {
+      "id": "RfsXI",
+      "name": "s s",
+      "time": "11/09/2024",
+      "itemNumbers": 2,
+      "totalQuantity": 6,
+      "totalPrice": 8600
+    },
+    {
+      "id": "3b0Oa",
+      "name": "s s",
+      "time": "11/09/2024",
+      "itemNumbers": 3,
+      "totalQuantity": 8,
+      "totalPrice": 9400
+    },
+    {
+      "id": "ScpLG",
+      "name": "dfgfg d",
+      "time": "11/09/2024",
+      "itemNumbers": 2,
+      "totalQuantity": 3,
+      "totalPrice": 4200
+    },
+    {
+      "id": "ViHgN",
+      "name": "s s",
+      "time": "11/09/2024",
+      "itemNumbers": 3,
+      "totalQuantity": 7,
+      "totalPrice": 8100
+    }
+  ]
 }

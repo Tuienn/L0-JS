@@ -6,7 +6,7 @@ const getByIDProduct = (listData, idProduct) => {
 };
 
 //Calculate total of a product => list of total of each product
-const totalPriceEachProduct = (listData, cart) => {
+const getTotalPriceEachProduct = (listData, cart) => {
     return cart.map((item) => {
         const product = getByIDProduct(listData, item.idProduct);
         return product.price * item.quantity;
@@ -14,17 +14,23 @@ const totalPriceEachProduct = (listData, cart) => {
 };
 
 //Calculate total price of all products
-const totalPriceAllProducts = (listData, cart) =>
-    totalPriceEachProduct(listData, cart).reduce((a, b) => a + b, 0);
+const getTotalPriceAllProducts = (listData, cart) =>
+    getTotalPriceEachProduct(listData, cart).reduce((a, b) => a + b, 0);
 
 //Calculate total quantity of all products
-const totalQuantityAllProducts = (cart) => {
+const getTotalQuantityAllProducts = (cart) => {
     return cart.reduce((a, b) => a + b.quantity, 0);
 };
 
+//Get info to save in bill(post API)
+const getItemNumbers = (cart) => {
+    return cart.length;
+};
+
 export {
-    totalPriceEachProduct,
-    totalPriceAllProducts,
-    totalQuantityAllProducts,
+    getTotalPriceEachProduct,
+    getTotalPriceAllProducts,
+    getTotalQuantityAllProducts,
     getByIDProduct,
+    getItemNumbers,
 };

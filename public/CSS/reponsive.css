@@ -1,9 +1,65 @@
 /* Mobile */
+@media (max-width: 480px) {
+    #main form {
+        width: 300px;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--name
+        .form-field__group-input {
+        flex-direction: column;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--name
+        .form-field__group-input
+        input {
+        width: 100%;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--name
+        .form-field__group-input
+        input:first-child {
+        margin-right: 0px;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--name
+        .form-field__group-input
+        input:last-child {
+        margin-top: 5px;
+        margin-left: 0px;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--address
+        .form-field__group-input
+        div {
+        flex-direction: column;
+    }
+    #main
+        form
+        .form__main-content
+        .form-field.form-field--address
+        .form-field__group-input
+        div
+        select.form-input {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
 @media (max-width: 739px) {
     table th,
     table td {
         font-size: 13px !important;
     }
+
     table td.tbl__quantity i {
         margin: 0 !important;
     }

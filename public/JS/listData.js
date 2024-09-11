@@ -112,7 +112,9 @@ const updateListData = () => {
     }
 };
 //Set list data into local storage
-updateListData();
+if (getLocalStorage(keyLocalStorageListSP) === null) {
+    updateListData();
+}
 //First time, set list data into local storage
 export {
     keyLocalStorageListSP,

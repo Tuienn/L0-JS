@@ -9,6 +9,9 @@ const APIBill = "http://localhost:3000/bill";
 
 // Handle with location
 const getLocation = async () => {
+    const mainContent = document.getElementById("main");
+    mainContent.innerHTML = `<div class="loading"></div>`;
+
     const response = Promise.all([
         fetch(APIProvince),
         fetch(APIDistrict),
@@ -53,6 +56,14 @@ const getWardsByDistrictID = (codeDistrict) => {
 };
 
 // Handle with bill
+const getCurrentDate = () => {
+    const today = new Date(); // Lấy ngày hiện tại
+    const day = String(today.getDate()).padStart(2, "0"); // Lấy ngày và thêm số 0 phía trước nếu < 10
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Lấy tháng (cộng 1 vì tháng bắt đầu từ 0)
+    const year = today.getFullYear(); // Lấy năm
+
+    return `${day}/${month}/${year}`; // Trả về chuỗi định dạng ngày/tháng/năm
+};
 const generateRandomID = (length) => {
     const characters =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -68,15 +79,19 @@ const generateRandomID = (length) => {
 
     return createID("");
 };
-const createObjectClientInfo = (name, email, phoneNumber, address, note) => {
+const createObjectClientInfo = (
+    name,
+    itemNumbers,
+    totalQuantity,
+    totalPrice
+) => {
     return {
-        id: generateRandomID(10),
-        time: new Date().toLocaleString(),
+        id: generateRandomID(5),
         name,
-        email,
-        phoneNumber,
-        address,
-        note,
+        time: getCurrentDate(),
+        itemNumbers,
+        totalQuantity,
+        totalPrice,
     };
 };
 
@@ -97,15 +112,26 @@ const postAPI = (data, API) => {
         });
 };
 
-const createBill_POST = (name, email, phoneNumber, address, note) => {
+const createBill_POST = (name, itemNumbers, totalQuantity, totalPrice) => {
     const bill = createObjectClientInfo(
         name,
-        email,
-        phoneNumber,
-        address,
-        note
+        itemNumbers,
+        totalQuantity,
+        totalPrice
     );
     postAPI(bill, APIBill);
+};
+const getBill_GET = async () => {
+    const response = await fetch(APIBill);
+    const data = await response.json();
+    return data;
+};
+const deleteBill_DELETE = (id) => {
+    fetch(`${APIBill}/${id}`, {
+        method: "DELETE",
+    })
+        .then((response) => response.json())
+        .catch((error) => console.log(error));
 };
 
 export {
@@ -113,4 +139,6 @@ export {
     getDistrictsByProvinceID,
     getWardsByDistrictID,
     createBill_POST,
+    getBill_GET,
+    deleteBill_DELETE,
 };

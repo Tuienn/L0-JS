@@ -10,13 +10,21 @@ import {
     renderProducts_main,
     renderShoppingCart_main,
     renderClientInfo_main,
+    renderBill_main,
 } from "./renderUI.js";
 import {
-    totalPriceAllProducts,
-    totalPriceEachProduct,
+    getTotalPriceAllProducts,
     getByIDProduct,
+    getTotalQuantityAllProducts,
+    getItemNumbers,
+    getTotalPriceEachProduct,
 } from "./shoppingCart.js";
-import { dataProvince, createBill_POST } from "./handleAPI.js";
+import {
+    dataProvince,
+    createBill_POST,
+    getBill_GET,
+    deleteBill_DELETE,
+} from "./handleAPI.js";
 import {
     checkError_groupInputName,
     checkError_inputEmail,
@@ -105,7 +113,7 @@ btnHomePage.addEventListener("click", () => {
 //Shopping cart
 let cart = getLocalStorage(keyLocalStorageItemCart) || [];
 const reRenderTotalEachProduct = (index) => {
-    const totalEachProduct = totalPriceEachProduct(
+    const totalEachProduct = getTotalPriceEachProduct(
         listDataFromLocalStorage,
         cart
     )[index];
@@ -114,7 +122,7 @@ const reRenderTotalEachProduct = (index) => {
     ].innerText = `$${totalEachProduct}`;
 };
 const reRenderTotalAllProducts = () => {
-    const totalAllProducts = totalPriceAllProducts(
+    const totalAllProducts = getTotalPriceAllProducts(
         listDataFromLocalStorage,
         cart
     );
@@ -184,27 +192,6 @@ const closeClientInfo = () => {
     handleShoppingCart_main();
 };
 
-// Get data from input
-const getName_input = (groupInput) => {
-    return `${groupInput[0].value} ${groupInput[1].value}`;
-};
-const getEmail_input = (groupInput) => {
-    return groupInput[2].value;
-};
-const getPhoneNumber_input = (groupInput) => {
-    return groupInput[3].value;
-};
-const getAddress_input = (groupInput) => {
-    const province = groupInput[4].options[groupInput[4].selectedIndex].text;
-    const district = groupInput[5].options[groupInput[5].selectedIndex].text;
-    const ward = groupInput[6].options[groupInput[6].selectedIndex].text;
-    const houseNumber = groupInput[7].value;
-
-    return `${province}-${district}-${ward}-${houseNumber}`;
-};
-const getNote_input = (groupInput) => {
-    return groupInput[8].value;
-};
 const handleCloseClientInfo = () => {
     const btnClose = document.querySelector(".form__heading i");
     const btnClose2 = document.querySelector(".form__group-btn button");
@@ -248,14 +235,17 @@ const handleSubmitClientInfo = () => {
             locationIsCorrect
         ) {
             createBill_POST(
-                getName_input(groupInput),
-                getEmail_input(groupInput),
-                getPhoneNumber_input(groupInput),
-                getAddress_input(groupInput),
-                getNote_input(groupInput)
+                `${groupInput[0].value} ${groupInput[1].value}`,
+                getItemNumbers(cart),
+                getTotalQuantityAllProducts(cart),
+                getTotalPriceAllProducts(listDataFromLocalStorage, cart)
             );
-            updateListData();
+            listDataFromLocalStorage = updateListData();
+            alert("Buy successfully!");
             clearCart();
+
+            removeActiveOverlay();
+            renderProducts_main(listDataFromLocalStorage);
         }
     });
 };
@@ -277,11 +267,13 @@ const handleOpenClientInfo = () => {
 };
 
 const handleShoppingCart_main = () => {
-    handleMinusQuantity();
-    handlePlusQuantity();
-    handleClearCart();
+    if (cart.length !== 0) {
+        handleMinusQuantity();
+        handlePlusQuantity();
+        handleClearCart();
+        handleOpenClientInfo();
+    }
     handleBackToShopping();
-    handleOpenClientInfo();
 };
 const handleClearCart = () => {
     const groupClearCart = document.querySelectorAll("td.tbl__clear-cart i");
@@ -311,3 +303,29 @@ cartPage.addEventListener("click", () => {
     renderShoppingCart_main(checkCartIsNull(), listDataFromLocalStorage, cart);
     handleShoppingCart_main();
 });
+
+//Render bill to main
+const handleRemoveBill = () => {
+    const groupRemoveBill = document.querySelectorAll("table.table-bill i");
+    const groupRemoveBillLength = groupRemoveBill.length;
+    for (let i = 0; i < groupRemoveBillLength; i++) {
+        groupRemoveBill[i].addEventListener("click", () => {
+            if (confirm("Are you sure you want to delete this bill?")) {
+                deleteBill_DELETE(bills[i].id);
+                bills.splice(i, 1);
+                renderBill_main(bills);
+                handleBill_main();
+            }
+        });
+    }
+};
+const btnBill = document.querySelector(".nav-btn--bill");
+const handleBill_main = async () => {
+    const bills = await getBill_GET();
+    renderBill_main(bills);
+    if (bills.length !== 0) {
+        handleRemoveBill();
+    }
+    handleBackToShopping();
+};
+btnBill.addEventListener("click", handleBill_main);
