@@ -53,6 +53,10 @@
         width: 100%;
         margin-bottom: 5px;
     }
+    #Details {
+        font-size: 9px;
+        width: 45px;
+    }
 }
 @media (max-width: 739px) {
     table th,

@@ -83,7 +83,8 @@ const createObjectClientInfo = (
     name,
     itemNumbers,
     totalQuantity,
-    totalPrice
+    totalPrice,
+    billDetail
 ) => {
     return {
         id: generateRandomID(5),
@@ -92,6 +93,7 @@ const createObjectClientInfo = (
         itemNumbers,
         totalQuantity,
         totalPrice,
+        billDetail,
     };
 };
 
@@ -112,12 +114,19 @@ const postAPI = (data, API) => {
         });
 };
 
-const createBill_POST = (name, itemNumbers, totalQuantity, totalPrice) => {
+const createBill_POST = (
+    name,
+    itemNumbers,
+    totalQuantity,
+    totalPrice,
+    billDetail
+) => {
     const bill = createObjectClientInfo(
         name,
         itemNumbers,
         totalQuantity,
-        totalPrice
+        totalPrice,
+        billDetail
     );
     postAPI(bill, APIBill);
 };

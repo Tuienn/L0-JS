@@ -55,3 +55,15 @@
     cursor: pointer;
     font-size: 1.5rem;
 }
+.table-bill tbody tr td:first-child {
+    position: relative;
+}
+.table-bill tbody tr td:first-child select {
+    width: 80px;
+    border: none;
+    outline: none;
+    position: absolute;
+    left: -5px;
+    top: calc(50% + 10px);
+    cursor: pointer;
+}

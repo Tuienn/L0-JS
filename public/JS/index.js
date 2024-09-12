@@ -18,6 +18,7 @@ import {
     getTotalQuantityAllProducts,
     getItemNumbers,
     getTotalPriceEachProduct,
+    createBillDetail,
 } from "./shoppingCart.js";
 import {
     dataProvince,
@@ -81,13 +82,13 @@ renderProducts_main(listDataFromLocalStorage);
 const btnHomePage = document.querySelector(".nav-btn--home");
 // All event of add product to cart
 const handleHomePage_main = () => {
-    const findIndexProductInCart = (id) => {
+    const findIdProductInCart = (id) => {
         return cart.findIndex((product) => product.idProduct === id);
     };
 
     const addProduct = (i) => {
-        // idProduct = i + 1
-        const index = findIndexProductInCart(i + 1);
+        // idProduct = i + 1 (i = index of btn of group_plusCart)
+        const index = findIdProductInCart(i + 1);
 
         if (index !== -1) {
             cart[index].quantity += 1;
@@ -238,9 +239,10 @@ const handleSubmitClientInfo = () => {
                 `${groupInput[0].value} ${groupInput[1].value}`,
                 getItemNumbers(cart),
                 getTotalQuantityAllProducts(cart),
-                getTotalPriceAllProducts(listDataFromLocalStorage, cart)
+                getTotalPriceAllProducts(listDataFromLocalStorage, cart),
+                createBillDetail(listDataFromLocalStorage, cart)
             );
-            listDataFromLocalStorage = updateListData();
+            listDataFromLocalStorage = updateListData(listDataFromLocalStorage);
             alert("Buy successfully!");
             clearCart();
 
@@ -305,7 +307,7 @@ cartPage.addEventListener("click", () => {
 });
 
 //Render bill to main
-const handleRemoveBill = () => {
+const handleRemoveBill = (bills) => {
     const groupRemoveBill = document.querySelectorAll("table.table-bill i");
     const groupRemoveBillLength = groupRemoveBill.length;
     for (let i = 0; i < groupRemoveBillLength; i++) {
@@ -319,12 +321,24 @@ const handleRemoveBill = () => {
         });
     }
 };
+const preventSelectDetails = () => {
+    const selectElement = document.getElementById("Details");
+
+    // Lưu giá trị mặc định ban đầu
+    const defaultValue = selectElement.value;
+
+    // Ngăn thay đổi giá trị của select
+    selectElement.addEventListener("change", function (event) {
+        selectElement.value = defaultValue; // Đặt lại giá trị về mặc định
+    });
+};
 const btnBill = document.querySelector(".nav-btn--bill");
 const handleBill_main = async () => {
     const bills = await getBill_GET();
     renderBill_main(bills);
     if (bills.length !== 0) {
-        handleRemoveBill();
+        handleRemoveBill(bills);
+        preventSelectDetails();
     }
     handleBackToShopping();
 };

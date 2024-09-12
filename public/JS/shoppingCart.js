@@ -1,3 +1,4 @@
+import {} from "./listData.js";
 const findIndexProductInListData = (listData, idProduct) => {
     return listData.findIndex((item) => item.id === idProduct);
 };
@@ -26,6 +27,19 @@ const getTotalQuantityAllProducts = (cart) => {
 const getItemNumbers = (cart) => {
     return cart.length;
 };
+// Create bill detail for each shopping cart
+const createBillDetail = (listData, cart) => {
+    return cart.map((item) => {
+        const product = getByIDProduct(listData, item.idProduct);
+        return {
+            idProduct: product.id,
+            name: product.name,
+            quantity: item.quantity,
+            subTotal: product.price,
+            total: product.price * item.quantity,
+        };
+    });
+};
 
 export {
     getTotalPriceEachProduct,
@@ -33,4 +47,5 @@ export {
     getTotalQuantityAllProducts,
     getByIDProduct,
     getItemNumbers,
+    createBillDetail,
 };

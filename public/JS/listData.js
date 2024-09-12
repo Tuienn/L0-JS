@@ -90,10 +90,10 @@ const getLocalStorage = (key) => {
 const findCartItem = (cart, id) => {
     return cart.find((item) => item.idProduct === id);
 };
-const updateListData = () => {
+const updateListData = (listDataFromLocalStorage) => {
     const cart = getLocalStorage(keyLocalStorageItemCart);
     if (cart && cart.length !== 0) {
-        const newListData = listData.map((item) => {
+        const newListData = listDataFromLocalStorage.map((item) => {
             if (findCartItem(cart, item.id)) {
                 return {
                     ...item,
@@ -113,9 +113,10 @@ const updateListData = () => {
 };
 //Set list data into local storage
 if (getLocalStorage(keyLocalStorageListSP) === null) {
-    updateListData();
+    updateListData(listData);
 }
 //First time, set list data into local storage
+
 export {
     keyLocalStorageListSP,
     keyLocalStorageItemCart,

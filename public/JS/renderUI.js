@@ -242,8 +242,31 @@ const renderClientInfo_main = (dataProvince) => {
 const renderBill_main = (bills) => {
     if (bills.length !== 0) {
         const htmls = bills.map((bill) => {
+            const billDetailHtmls = bill.billDetail.map((detail) => {
+                console.log(detail.name);
+
+                return `<optgroup label="${detail.name}">
+                            <option value="">Quantity: ${detail.quantity}</option>
+                            <option value="">Sub total: $${detail.subTotal}</option>
+                            <option value="">Total: $${detail.total}</option>
+                        </optgroup>`;
+            });
+            const billDetailHtml = billDetailHtmls.join("");
             return `<tr>
-                        <td>${bill.id}</td>
+                        <td>
+                            ${bill.id}
+                            <select name="Details" id="Details">
+                                <option
+                                    value="default"
+                                    selected
+                                    disabled
+                                    hidden
+                                >
+                                    Details
+                                </option>
+                                ${billDetailHtml}
+                            </select>
+                        </td>
                         <td>${bill.name}</td>
                         <td>${bill.time}</td>
                         <td>${bill.itemNumbers}</td>
