@@ -243,8 +243,6 @@ const renderBill_main = (bills) => {
     if (bills.length !== 0) {
         const htmls = bills.map((bill) => {
             const billDetailHtmls = bill.billDetail.map((detail) => {
-                console.log(detail.name);
-
                 return `<optgroup label="${detail.name}">
                             <option value="">Quantity: ${detail.quantity}</option>
                             <option value="">Sub total: $${detail.subTotal}</option>
@@ -255,7 +253,7 @@ const renderBill_main = (bills) => {
             return `<tr>
                         <td>
                             ${bill.id}
-                            <select name="Details" id="Details">
+                            <select name="Details" class="details">
                                 <option
                                     value="default"
                                     selected

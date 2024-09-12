@@ -53,7 +53,7 @@
         width: 100%;
         margin-bottom: 5px;
     }
-    #Details {
+    .table-bill tbody tr td:first-child select.details {
         font-size: 9px;
         width: 45px;
     }

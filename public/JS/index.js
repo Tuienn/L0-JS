@@ -1,10 +1,5 @@
-import {
-    keyLocalStorageListSP,
-    keyLocalStorageItemCart,
-    setLocalStorage,
-    getLocalStorage,
-    updateListData,
-} from "./listData.js";
+import { keyLocalStorageListSP, keyLocalStorageItemCart } from "./listData.js";
+import library from "./file.js";
 
 import {
     renderProducts_main,
@@ -20,12 +15,7 @@ import {
     getTotalPriceEachProduct,
     createBillDetail,
 } from "./shoppingCart.js";
-import {
-    dataProvince,
-    createBill_POST,
-    getBill_GET,
-    deleteBill_DELETE,
-} from "./handleAPI.js";
+
 import {
     checkError_groupInputName,
     checkError_inputEmail,
@@ -34,6 +24,9 @@ import {
     handleOnFocusInput_clearInputError,
     eventSelectLocation,
 } from "./clientInfo.js";
+
+// First call API
+const [dataProvince, dataDistrict, dataWard] = await library.getLocation();
 
 //Overlay
 const overlay = document.querySelector(".overlay");
@@ -73,7 +66,7 @@ overlay.addEventListener("click", removeActiveOverlay);
 navbarGroupBtn.addEventListener("click", removeActiveOverlay);
 
 //Get list data from local storage
-let listDataFromLocalStorage = getLocalStorage(keyLocalStorageListSP);
+let listDataFromLocalStorage = library.getLocalStorage(keyLocalStorageListSP);
 
 //Home page
 //Default render home page
@@ -95,14 +88,14 @@ const handleHomePage_main = () => {
         } else {
             cart.push({ idProduct: i + 1, quantity: 1 });
         }
-        setLocalStorage(keyLocalStorageItemCart, cart);
+        library.setLocalStorage(keyLocalStorageItemCart, cart);
     };
 
     const group_plusCart = document.querySelectorAll(".cart-plus");
-    for (let i = 0; i < group_plusCart.length; i++) {
+    group_plusCart.forEach((btnPlusCart, i) => {
         // Index of product in listDataFromLocalStorage = index of button in group_plusCart + 1
-        group_plusCart[i].addEventListener("click", () => addProduct(i));
-    }
+        btnPlusCart.addEventListener("click", () => addProduct(i));
+    });
 };
 handleHomePage_main();
 
@@ -112,7 +105,7 @@ btnHomePage.addEventListener("click", () => {
 });
 
 //Shopping cart
-let cart = getLocalStorage(keyLocalStorageItemCart) || [];
+let cart = library.getLocalStorage(keyLocalStorageItemCart) || [];
 const reRenderTotalEachProduct = (index) => {
     const totalEachProduct = getTotalPriceEachProduct(
         listDataFromLocalStorage,
@@ -134,45 +127,45 @@ const reRenderTotalAllProducts = () => {
 const handleMinusQuantity = () => {
     const groupQuantity = document.querySelectorAll("td.tbl__quantity");
 
-    for (let i = 0; i < groupQuantity.length; i++) {
-        groupQuantity[i]
+    groupQuantity.forEach((quantityElement, i) => {
+        quantityElement
             .querySelector("i:first-child")
             .addEventListener("click", () => {
                 if (cart[i].quantity > 0) {
                     cart[i].quantity -= 1;
-                    groupQuantity[i].querySelector("p").innerText =
+                    quantityElement.querySelector("p").innerText =
                         cart[i].quantity;
 
-                    setLocalStorage(keyLocalStorageItemCart, cart);
+                    library.setLocalStorage(keyLocalStorageItemCart, cart);
                     reRenderTotalEachProduct(i);
                     reRenderTotalAllProducts();
                 }
             });
-    }
+    });
 };
 
 const handlePlusQuantity = () => {
     const groupQuantity = document.querySelectorAll("td.tbl__quantity");
 
-    for (let i = 0; i < groupQuantity.length; i++) {
+    groupQuantity.forEach((quantityElement, i) => {
         const productInListData = getByIDProduct(
             listDataFromLocalStorage,
             cart[i].idProduct
         );
-        groupQuantity[i]
+        quantityElement
             .querySelector("i:last-child")
             .addEventListener("click", () => {
                 if (cart[i].quantity < productInListData.quantity) {
                     cart[i].quantity += 1;
-                    groupQuantity[i].querySelector("p").innerText =
+                    quantityElement.querySelector("p").innerText =
                         cart[i].quantity;
 
-                    setLocalStorage(keyLocalStorageItemCart, cart);
+                    library.setLocalStorage(keyLocalStorageItemCart, cart);
                     reRenderTotalEachProduct(i);
                     reRenderTotalAllProducts();
                 }
             });
-    }
+    });
 };
 
 const handleBackToShopping = () => {
@@ -183,7 +176,7 @@ const handleBackToShopping = () => {
 };
 const clearCart = () => {
     cart = [];
-    setLocalStorage(keyLocalStorageItemCart, cart);
+    library.setLocalStorage(keyLocalStorageItemCart, cart);
 };
 
 //Client info
@@ -235,14 +228,16 @@ const handleSubmitClientInfo = () => {
             phoneNumberIsCorrect &&
             locationIsCorrect
         ) {
-            createBill_POST(
+            library.createBill_POST(
                 `${groupInput[0].value} ${groupInput[1].value}`,
                 getItemNumbers(cart),
                 getTotalQuantityAllProducts(cart),
                 getTotalPriceAllProducts(listDataFromLocalStorage, cart),
                 createBillDetail(listDataFromLocalStorage, cart)
             );
-            listDataFromLocalStorage = updateListData(listDataFromLocalStorage);
+            listDataFromLocalStorage = library.updateListData(
+                listDataFromLocalStorage
+            );
             alert("Buy successfully!");
             clearCart();
 
@@ -255,7 +250,7 @@ const handleSubmitClientInfo = () => {
 const handleClientInfo_main = () => {
     handleCloseClientInfo();
     handleSubmitClientInfo();
-    eventSelectLocation();
+    eventSelectLocation(dataDistrict, dataWard);
 };
 
 const handleOpenClientInfo = () => {
@@ -279,11 +274,11 @@ const handleShoppingCart_main = () => {
 };
 const handleClearCart = () => {
     const groupClearCart = document.querySelectorAll("td.tbl__clear-cart i");
-    for (let i = 0; i < groupClearCart.length; i++) {
-        groupClearCart[i].addEventListener("click", () => {
+    groupClearCart.forEach((clearCartBtn, i) => {
+        clearCartBtn.addEventListener("click", () => {
             if (confirm("Are you sure you want to delete this product?")) {
                 cart.splice(i, 1);
-                setLocalStorage(keyLocalStorageItemCart, cart);
+                library.setLocalStorage(keyLocalStorageItemCart, cart);
                 renderShoppingCart_main(
                     checkCartIsNull(),
                     listDataFromLocalStorage,
@@ -292,7 +287,7 @@ const handleClearCart = () => {
                 handleShoppingCart_main();
             }
         });
-    }
+    });
 };
 
 //Check cart is null?
@@ -309,32 +304,31 @@ cartPage.addEventListener("click", () => {
 //Render bill to main
 const handleRemoveBill = (bills) => {
     const groupRemoveBill = document.querySelectorAll("table.table-bill i");
-    const groupRemoveBillLength = groupRemoveBill.length;
-    for (let i = 0; i < groupRemoveBillLength; i++) {
-        groupRemoveBill[i].addEventListener("click", () => {
+
+    groupRemoveBill.forEach((btnBill, i) => {
+        btnBill.addEventListener("click", () => {
             if (confirm("Are you sure you want to delete this bill?")) {
-                deleteBill_DELETE(bills[i].id);
+                library.deleteBill_DELETE(bills[i].id);
                 bills.splice(i, 1);
                 renderBill_main(bills);
                 handleBill_main();
             }
         });
-    }
+    });
 };
 const preventSelectDetails = () => {
-    const selectElement = document.getElementById("Details");
+    const groupSelectElement = document.querySelectorAll(".details");
 
-    // Lưu giá trị mặc định ban đầu
-    const defaultValue = selectElement.value;
-
-    // Ngăn thay đổi giá trị của select
-    selectElement.addEventListener("change", function (event) {
-        selectElement.value = defaultValue; // Đặt lại giá trị về mặc định
+    groupSelectElement.forEach((element) => {
+        const defaultValue = element.value;
+        element.addEventListener("change", (e) => {
+            e.target.value = defaultValue;
+        });
     });
 };
 const btnBill = document.querySelector(".nav-btn--bill");
 const handleBill_main = async () => {
-    const bills = await getBill_GET();
+    const bills = await library.getBill_GET();
     renderBill_main(bills);
     if (bills.length !== 0) {
         handleRemoveBill(bills);

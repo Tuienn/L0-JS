@@ -1,28 +1,83 @@
 {
-    "bill": [
+  "bill": [
+    {
+      "id": "IinfV",
+      "name": "f 7",
+      "time": "12/09/2024",
+      "itemNumbers": 3,
+      "totalQuantity": 6,
+      "totalPrice": 7300,
+      "billDetail": [
         {
-            "id": "vR5l0",
-            "name": "f q",
-            "time": "12/09/2024",
-            "itemNumbers": 2,
-            "totalQuantity": 3,
-            "totalPrice": 3400,
-            "billDetail": [
-                {
-                    "idProduct": 1,
-                    "name": "Nike Air Force 1",
-                    "quantity": 1,
-                    "subTotal": 1000,
-                    "total": 1000
-                },
-                {
-                    "idProduct": 2,
-                    "name": "Nike Air Max 90",
-                    "quantity": 2,
-                    "subTotal": 1200,
-                    "total": 2400
-                }
-            ]
+          "idProduct": 3,
+          "name": "Nike Air Jordan",
+          "quantity": 1,
+          "subTotal": 1500,
+          "total": 1500
+        },
+        {
+          "idProduct": 4,
+          "name": "Nike React Run",
+          "quantity": 1,
+          "subTotal": 1800,
+          "total": 1800
+        },
+        {
+          "idProduct": 1,
+          "name": "Nike Air Force 1",
+          "quantity": 4,
+          "subTotal": 1000,
+          "total": 4000
         }
-    ]
+      ]
+    },
+    {
+      "id": "bJut1",
+      "name": "d d",
+      "time": "12/09/2024",
+      "itemNumbers": 3,
+      "totalQuantity": 9,
+      "totalPrice": 12400,
+      "billDetail": [
+        {
+          "idProduct": 3,
+          "name": "Nike Air Jordan",
+          "quantity": 2,
+          "subTotal": 1500,
+          "total": 3000
+        },
+        {
+          "idProduct": 4,
+          "name": "Nike React Run",
+          "quantity": 3,
+          "subTotal": 1800,
+          "total": 5400
+        },
+        {
+          "idProduct": 1,
+          "name": "Nike Air Force 1",
+          "quantity": 4,
+          "subTotal": 1000,
+          "total": 4000
+        }
+      ]
+    },
+    {
+      "id": "d9g4w",
+      "name": "s s",
+      "time": "12/09/2024",
+      "itemNumbers": 1,
+      "totalQuantity": 3,
+      "totalPrice": 3000,
+      "billDetail": [
+        {
+          "idProduct": 1,
+          "name": "Nike Air Force 1",
+          "quantity": 3,
+          "subTotal": 1000,
+          "total": 3000
+        }
+      ]
+    }
+  ]
 }

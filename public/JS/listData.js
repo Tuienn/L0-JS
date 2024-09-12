@@ -1,3 +1,4 @@
+import library from "./file.js";
 //Declare a list of products
 let listData = [
     {
@@ -76,51 +77,10 @@ let listData = [
 const keyLocalStorageListSP = "DANHSACHSP";
 const keyLocalStorageItemCart = "DANHSACHITEMCART";
 
-//Handle with local storage
-const setLocalStorage = (key, value) => {
-    if (value || typeof value === "array") {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
-};
-
-const getLocalStorage = (key) => {
-    return JSON.parse(localStorage.getItem(key));
-};
-//Update list data after buy
-const findCartItem = (cart, id) => {
-    return cart.find((item) => item.idProduct === id);
-};
-const updateListData = (listDataFromLocalStorage) => {
-    const cart = getLocalStorage(keyLocalStorageItemCart);
-    if (cart && cart.length !== 0) {
-        const newListData = listDataFromLocalStorage.map((item) => {
-            if (findCartItem(cart, item.id)) {
-                return {
-                    ...item,
-                    quantity:
-                        item.quantity - findCartItem(cart, item.id).quantity,
-                };
-            } else {
-                return item;
-            }
-        });
-        setLocalStorage(keyLocalStorageListSP, newListData);
-        return newListData;
-    } else {
-        setLocalStorage(keyLocalStorageListSP, listData);
-        return listData;
-    }
-};
 //Set list data into local storage
-if (getLocalStorage(keyLocalStorageListSP) === null) {
-    updateListData(listData);
+if (library.getLocalStorage(keyLocalStorageListSP) === null) {
+    library.updateListData(listData);
 }
 //First time, set list data into local storage
 
-export {
-    keyLocalStorageListSP,
-    keyLocalStorageItemCart,
-    setLocalStorage,
-    getLocalStorage,
-    updateListData,
-};
+export { keyLocalStorageListSP, keyLocalStorageItemCart };

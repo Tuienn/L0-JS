@@ -1,4 +1,4 @@
-import { getDistrictsByProvinceID, getWardsByDistrictID } from "./handleAPI.js";
+import library from "./file.js";
 
 const inputIsNull = (input) => {
     if (input.value == "") {
@@ -153,17 +153,20 @@ const checkInputLocationIsChecked_inOrder = (
 
 const handleOnFocusInput_clearInputError = (groupInput) => {
     const groupInputLength = groupInput.length;
-    for (let i = 0; i < groupInputLength; i++) {
-        groupInput[i].addEventListener("focus", () => {
-            removeClassInputError(groupInput[i]);
+    groupInput.forEach((input) => {
+        input.addEventListener("focus", () => {
+            removeClassInputError(input);
         });
-    }
+    });
 };
 
-const loadData_inputDistrict = (inputProvince, inputDistrict) => {
+const loadData_inputDistrict = (inputProvince, inputDistrict, dataDistrict) => {
     inputProvince.addEventListener("change", () => {
         const provinceCode = inputProvince.value;
-        const dataDistrictFilter = getDistrictsByProvinceID(provinceCode);
+        const dataDistrictFilter = library.getDistrictsByProvinceID(
+            provinceCode,
+            dataDistrict
+        );
         const htmls = dataDistrictFilter.map(
             (district) =>
                 `<option value=${district.code}>${district.name}</option>`
@@ -181,10 +184,13 @@ const loadData_inputDistrict = (inputProvince, inputDistrict) => {
                                 `;
     });
 };
-const loadData_inputWard = (inputDistrict, inputWard) => {
+const loadData_inputWard = (inputDistrict, inputWard, dataWard) => {
     inputDistrict.addEventListener("change", () => {
         const districtCode = inputDistrict.value;
-        const dataWardFilter = getWardsByDistrictID(districtCode);
+        const dataWardFilter = library.getWardsByDistrictID(
+            districtCode,
+            dataWard
+        );
 
         const htmls = dataWardFilter.map(
             (ward) => `<option value=${ward.code}>${ward.name}</option>`
@@ -203,14 +209,14 @@ const loadData_inputWard = (inputDistrict, inputWard) => {
     });
 };
 
-const eventSelectLocation = () => {
+const eventSelectLocation = (dataDistrict, dataWard) => {
     //Select select tag with element id input--province -> id input--district -> id input--ward
     const inputProvince = document.getElementById("input--province");
     const inputDistrict = document.getElementById("input--district");
     const inputWard = document.getElementById("input--ward");
 
-    loadData_inputDistrict(inputProvince, inputDistrict);
-    loadData_inputWard(inputDistrict, inputWard);
+    loadData_inputDistrict(inputProvince, inputDistrict, dataDistrict);
+    loadData_inputWard(inputDistrict, inputWard, dataWard);
     checkInputLocationIsChecked_inOrder(
         inputProvince,
         inputDistrict,
