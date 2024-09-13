@@ -6,14 +6,20 @@
 A. Cách chạy dự án
     Sử dụng "yarn start" = file index.html(http://localhost:3000/) 
                            json server(http://localhost:3000/bill)
+
 B. Cấu trúc file 
-    1. File bill.json: Lưu danh sách hóa đơn 2. Folder public
+    1. File bill.json: Lưu danh sách hóa đơn 
+    
+    2. Folder public
         a. File index.html: Trang chính(HOME + BILL + SHOPPING CART)
+
         b. Folder CSS 
             - File: responsive.css: responsive với Mobile, tablet, PC 
+
             - Folder utilities 
                 + File base.css: CSS base cho trang web 
                 + File grid.css: Grid layout thư viện (Học ở F8) hỗ trợ responsive cho trang HOME 
+
             - Folder main 
                 + File index.css: CSS tổng quát cho .overlay, #main và loading  
                 + File bill.css: CSS cho trang BILL 
@@ -21,6 +27,7 @@ B. Cấu trúc file
                 + File navBar.css: CSS cho Thanh navbar 
                 + File product.css: CSS cho item sản phẩm trang HOME 
                 + File shoppingCart.css: CSS cho trang SHOPPING CART
+
         c. Folder JS 
             - File index.js: File chính xử lý các event, import các chức năng của các file còn lại 
             - File file.js: Thư viện thao tác với localStorage và API 
@@ -99,7 +106,7 @@ Bài 16:
         + Function renderBill_main để render bill(dữ liệu được fetch trong index.js với function getBill_GET)
         + Tạo tag select cho nút "Details" để xem thông tin sản phẩm
         + Function updateListData_afterReturn để cập nhật listData sau khi trả hàng
-        
+
 Bài 17: File file.js với IFFE
 
     
