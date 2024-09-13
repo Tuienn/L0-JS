@@ -1,6 +1,9 @@
 ***Một vài lời của em ạ
+
     - Chúc anh chị review bài em 1 ngày tốt lành ạ
-    - Link gitHub: [text](https://github.com/Tuienn/L0-JS.git)
+
+    - Link gitHub: (https://github.com/Tuienn/L0-JS.git)
+
     - Em có thay đổi tên của 1 số biến, function để tránh vừa tiếng anh, vừa tiếng việt
 
 A. Cách chạy dự án
@@ -8,8 +11,9 @@ A. Cách chạy dự án
                            json server(http://localhost:3000/bill)
 
 B. Cấu trúc file 
+
     1. File bill.json: Lưu danh sách hóa đơn 
-    
+
     2. Folder public
         a. File index.html: Trang chính(HOME + BILL + SHOPPING CART)
 
@@ -38,6 +42,7 @@ B. Cấu trúc file
 C. Bài tập
 
 Bài 1: File listData.js 
+
     **Note: - Chuyển thuộc tính soLuong -> quantity
             - Thêm thuộc tính url là link ảnh
 
