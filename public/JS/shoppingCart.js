@@ -1,6 +1,8 @@
-import {} from "./listData.js";
 const findIndexProductInListData = (listData, idProduct) => {
     return listData.findIndex((item) => item.id === idProduct);
+};
+const findIdProductInCart = (id, cart) => {
+    return cart.findIndex((product) => product.idProduct === id);
 };
 const getByIDProduct = (listData, idProduct) => {
     return listData[findIndexProductInListData(listData, idProduct)];
@@ -48,4 +50,5 @@ export {
     getByIDProduct,
     getItemNumbers,
     createBillDetail,
+    findIdProductInCart
 };

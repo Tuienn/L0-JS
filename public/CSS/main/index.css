@@ -19,3 +19,21 @@
     overflow: hidden;
     padding-bottom: 30px;
 }
+
+.loading {
+    position: absolute;
+    left: calc(50% - 17.5px);
+    top: calc(50% - 17.5px);
+
+    width: 70px;
+    height: 70px;
+    border: 10px solid rgb(231, 228, 228);
+    border-top: 10px solid gray;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+}
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

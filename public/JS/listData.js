@@ -79,7 +79,7 @@ const keyLocalStorageItemCart = "DANHSACHITEMCART";
 
 //Set list data into local storage
 if (library.getLocalStorage(keyLocalStorageListSP) === null) {
-    library.updateListData(listData);
+    library.updateListData_afterBuy(listData);
 }
 //First time, set list data into local storage
 

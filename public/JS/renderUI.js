@@ -7,7 +7,7 @@ import {
 const mainSection = document.getElementById("main");
 
 //Render list products
-const renderProducts_main = (listProducts) => {
+const renderProducts_main = async (listProducts) => {
     const htmls = listProducts.map((product) => {
         return `<div class="col l-3 m-4 c-6">
                         <div class="product">
@@ -38,7 +38,7 @@ const renderProducts_main = (listProducts) => {
 };
 
 //Render shopping cart
-const renderShoppingCart_main = (cartIsNull, listData, cart) => {
+const renderShoppingCart_main = async (cartIsNull, listData, cart) => {
     if (cartIsNull === true) {
         mainSection.innerHTML = `<div class="empty-cart">
                                     <img src="./empty-cart.png" alt="" />
@@ -118,7 +118,7 @@ const renderShoppingCart_main = (cartIsNull, listData, cart) => {
     }
 };
 
-const renderClientInfo_main = (dataProvince) => {
+const renderClientInfo_main = async (dataProvince) => {
     const htmls = dataProvince.map((data) => {
         return `<option value=${data.code}>${data.name}</option>`;
     });
@@ -239,7 +239,7 @@ const renderClientInfo_main = (dataProvince) => {
                                 </div>
                             </form>`;
 };
-const renderBill_main = (bills) => {
+const renderBill_main = async (bills) => {
     if (bills.length !== 0) {
         const htmls = bills.map((bill) => {
             const billDetailHtmls = bill.billDetail.map((detail) => {

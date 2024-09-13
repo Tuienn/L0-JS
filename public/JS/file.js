@@ -3,20 +3,28 @@ const library = (() => {
     "use strict";
     //Handle with local storage
     const setLocalStorage = (key, value) => {
-        if (value || typeof value === "array") {
+        if (value || Array.isArray(value)) {
             localStorage.setItem(key, JSON.stringify(value));
         }
     };
 
     const getLocalStorage = (key) => {
-        return JSON.parse(localStorage.getItem(key));
+        const data = JSON.parse(localStorage.getItem(key));
+        if (Array.isArray(data)) {
+            return data.map(item => ({
+                ...item,
+                price: Number(item.price),
+                quantity: Number(item.quantity)
+            }));
+        }
+        return data;
     };
     //Update list data after buy
     const findCartItem = (cart, id) => {
         return cart.find((item) => item.idProduct === id);
     };
 
-    const updateListData = (listDataFromLocalStorage) => {
+    const updateListData_afterBuy = (listDataFromLocalStorage) => {
         const cart = getLocalStorage(keyLocalStorageItemCart);
 
         if (cart && cart.length !== 0) {
@@ -39,6 +47,20 @@ const library = (() => {
             return listData;
         }
     };
+    const updateListData_afterReturn = (listDataFromLocalStorage, bill) => {
+        const newListData = listDataFromLocalStorage.map((item) => {
+            const billItem = bill.billDetail.find(billItem => billItem.idProduct === item.id);
+            if (billItem) {
+                return {
+                    ...item,
+                    quantity: item.quantity + billItem.quantity,
+                };
+            }
+            return item;
+        });
+        setLocalStorage(keyLocalStorageListSP, newListData);
+        return newListData;
+    };
 
     // Handle with API
     //Link API thành phố / tỉnh
@@ -52,16 +74,20 @@ const library = (() => {
 
     // Handle with location
     const getLocation = async () => {
-        const mainContent = document.getElementById("main");
-        mainContent.innerHTML = `<div class="loading"></div>`;
+        try {
+            const mainContent = document.getElementById("main");
+            mainContent.innerHTML = `<div class="loading"></div>`;
 
-        const response = Promise.all([
-            fetch(APIProvince),
-            fetch(APIDistrict),
-            fetch(APIWard),
-        ]);
-        const data = Promise.all((await response).map((res) => res.json()));
-        return data;
+            const response = await Promise.all([
+                fetch(APIProvince),
+                fetch(APIDistrict),
+                fetch(APIWard),
+            ]);
+            const data = await Promise.all(response.map((res) => res.json()));
+            return data;
+        } catch (error) {
+            throw new Error(error);
+        }
     };
 
     //Filter district by province
@@ -176,9 +202,14 @@ const library = (() => {
         postAPI(bill, APIBill);
     };
     const getBill_GET = async () => {
-        const response = await fetch(APIBill);
-        const data = await response.json();
-        return data;
+        try {
+            const response = await fetch(APIBill);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error fetching bill data:", error);
+            throw new Error(error);
+        }
     };
     const deleteBill_DELETE = (id) => {
         fetch(`${APIBill}/${id}`, {
@@ -200,7 +231,8 @@ const library = (() => {
     return {
         setLocalStorage,
         getLocalStorage,
-        updateListData,
+        updateListData_afterBuy,
+        updateListData_afterReturn,
         getLocation,
         getDistrictsByProvinceID,
         getWardsByDistrictID,

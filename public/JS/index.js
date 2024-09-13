@@ -14,6 +14,7 @@ import {
     getItemNumbers,
     getTotalPriceEachProduct,
     createBillDetail,
+    findIdProductInCart
 } from "./shoppingCart.js";
 
 import {
@@ -70,18 +71,14 @@ let listDataFromLocalStorage = library.getLocalStorage(keyLocalStorageListSP);
 
 //Home page
 //Default render home page
-renderProducts_main(listDataFromLocalStorage);
+await renderProducts_main(listDataFromLocalStorage);
 
 const btnHomePage = document.querySelector(".nav-btn--home");
 // All event of add product to cart
 const handleHomePage_main = () => {
-    const findIdProductInCart = (id) => {
-        return cart.findIndex((product) => product.idProduct === id);
-    };
-
     const addProduct = (i) => {
         // idProduct = i + 1 (i = index of btn of group_plusCart)
-        const index = findIdProductInCart(i + 1);
+        const index = findIdProductInCart(i + 1 ,cart);
 
         if (index !== -1) {
             cart[index].quantity += 1;
@@ -99,8 +96,8 @@ const handleHomePage_main = () => {
 };
 handleHomePage_main();
 
-btnHomePage.addEventListener("click", () => {
-    renderProducts_main(listDataFromLocalStorage);
+btnHomePage.addEventListener("click", async () => {
+    await renderProducts_main(listDataFromLocalStorage);
     handleHomePage_main();
 });
 
@@ -169,8 +166,8 @@ const handlePlusQuantity = () => {
 };
 
 const handleBackToShopping = () => {
-    document.querySelector(".btn-back").addEventListener("click", () => {
-        renderProducts_main(listDataFromLocalStorage);
+    document.querySelector(".btn-back").addEventListener("click", async () => {
+        await renderProducts_main(listDataFromLocalStorage);
         handleHomePage_main();
     });
 };
@@ -180,9 +177,9 @@ const clearCart = () => {
 };
 
 //Client info
-const closeClientInfo = () => {
+const closeClientInfo = async () => {
     closeOverlay();
-    renderShoppingCart_main(checkCartIsNull(), listDataFromLocalStorage, cart);
+    await renderShoppingCart_main(checkCartIsNull(), listDataFromLocalStorage, cart);
     handleShoppingCart_main();
 };
 
@@ -235,7 +232,7 @@ const handleSubmitClientInfo = () => {
                 getTotalPriceAllProducts(listDataFromLocalStorage, cart),
                 createBillDetail(listDataFromLocalStorage, cart)
             );
-            listDataFromLocalStorage = library.updateListData(
+            listDataFromLocalStorage = library.updateListData_afterBuy(
                 listDataFromLocalStorage
             );
             alert("Buy successfully!");
@@ -256,9 +253,9 @@ const handleClientInfo_main = () => {
 const handleOpenClientInfo = () => {
     const btnBuy = document.querySelector("button.btn-buy");
 
-    btnBuy.addEventListener("click", () => {
+    btnBuy.addEventListener("click", async () => {
         openOverlay_disabledNavbar();
-        renderClientInfo_main(dataProvince);
+        await renderClientInfo_main(dataProvince);
         handleClientInfo_main();
     });
 };
@@ -267,19 +264,19 @@ const handleShoppingCart_main = () => {
     if (cart.length !== 0) {
         handleMinusQuantity();
         handlePlusQuantity();
-        handleClearCart();
+        handleClearAProduct();
         handleOpenClientInfo();
     }
     handleBackToShopping();
 };
-const handleClearCart = () => {
+const handleClearAProduct = () => {
     const groupClearCart = document.querySelectorAll("td.tbl__clear-cart i");
     groupClearCart.forEach((clearCartBtn, i) => {
-        clearCartBtn.addEventListener("click", () => {
+        clearCartBtn.addEventListener("click", async() => {
             if (confirm("Are you sure you want to delete this product?")) {
                 cart.splice(i, 1);
                 library.setLocalStorage(keyLocalStorageItemCart, cart);
-                renderShoppingCart_main(
+                await renderShoppingCart_main(
                     checkCartIsNull(),
                     listDataFromLocalStorage,
                     cart
@@ -296,21 +293,23 @@ const checkCartIsNull = () => {
 };
 
 const cartPage = document.querySelector(".nav-btn--cart");
-cartPage.addEventListener("click", () => {
-    renderShoppingCart_main(checkCartIsNull(), listDataFromLocalStorage, cart);
+cartPage.addEventListener("click", async () => {
+    await renderShoppingCart_main(checkCartIsNull(), listDataFromLocalStorage, cart);
     handleShoppingCart_main();
 });
 
 //Render bill to main
+
 const handleRemoveBill = (bills) => {
     const groupRemoveBill = document.querySelectorAll("table.table-bill i");
 
     groupRemoveBill.forEach((btnBill, i) => {
-        btnBill.addEventListener("click", () => {
-            if (confirm("Are you sure you want to delete this bill?")) {
+        btnBill.addEventListener("click", async () => {
+            if (confirm("Are you sure you want to return this bill?")) {
+                listDataFromLocalStorage = library.updateListData_afterReturn(listDataFromLocalStorage, bills[i]);
                 library.deleteBill_DELETE(bills[i].id);
                 bills.splice(i, 1);
-                renderBill_main(bills);
+                await renderBill_main(bills);
                 handleBill_main();
             }
         });
@@ -329,7 +328,7 @@ const preventSelectDetails = () => {
 const btnBill = document.querySelector(".nav-btn--bill");
 const handleBill_main = async () => {
     const bills = await library.getBill_GET();
-    renderBill_main(bills);
+    await renderBill_main(bills);
     if (bills.length !== 0) {
         handleRemoveBill(bills);
         preventSelectDetails();
