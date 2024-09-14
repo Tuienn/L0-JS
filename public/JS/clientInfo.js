@@ -152,7 +152,6 @@ const checkInputLocationIsChecked_inOrder = (
 };
 
 const handleOnFocusInput_clearInputError = (groupInput) => {
-    const groupInputLength = groupInput.length;
     groupInput.forEach((input) => {
         input.addEventListener("focus", () => {
             removeClassInputError(input);
@@ -160,7 +159,12 @@ const handleOnFocusInput_clearInputError = (groupInput) => {
     });
 };
 
-const loadData_inputDistrict = (inputProvince, inputDistrict, dataDistrict) => {
+const loadData_inputDistrict = (
+    inputProvince,
+    inputDistrict,
+    inputWard,
+    dataDistrict
+) => {
     inputProvince.addEventListener("change", () => {
         const provinceCode = inputProvince.value;
         const dataDistrictFilter = library.getDistrictsByProvinceID(
@@ -182,6 +186,15 @@ const loadData_inputDistrict = (inputProvince, inputDistrict, dataDistrict) => {
                                     </option>
                                     ${html}
                                 `;
+        inputWard.innerHTML = ` <option
+                                value="default"
+                                selected
+                                disabled
+                                hidden
+                                >
+                                    Chọn Xã/Phường
+                                </option>
+                            `;
     });
 };
 const loadData_inputWard = (inputDistrict, inputWard, dataWard) => {
@@ -215,13 +228,18 @@ const eventSelectLocation = (dataDistrict, dataWard) => {
     const inputDistrict = document.getElementById("input--district");
     const inputWard = document.getElementById("input--ward");
 
-    loadData_inputDistrict(inputProvince, inputDistrict, dataDistrict);
-    loadData_inputWard(inputDistrict, inputWard, dataWard);
     checkInputLocationIsChecked_inOrder(
         inputProvince,
         inputDistrict,
         inputWard
     );
+    loadData_inputDistrict(
+        inputProvince,
+        inputDistrict,
+        inputWard,
+        dataDistrict
+    );
+    loadData_inputWard(inputDistrict, inputWard, dataWard);
 };
 
 export {

@@ -11,10 +11,10 @@ const library = (() => {
     const getLocalStorage = (key) => {
         const data = JSON.parse(localStorage.getItem(key));
         if (Array.isArray(data)) {
-            return data.map(item => ({
+            return data.map((item) => ({
                 ...item,
                 price: Number(item.price),
-                quantity: Number(item.quantity)
+                quantity: Number(item.quantity),
             }));
         }
         return data;
@@ -49,7 +49,9 @@ const library = (() => {
     };
     const updateListData_afterReturn = (listDataFromLocalStorage, bill) => {
         const newListData = listDataFromLocalStorage.map((item) => {
-            const billItem = bill.billDetail.find(billItem => billItem.idProduct === item.id);
+            const billItem = bill.billDetail.find(
+                (billItem) => billItem.idProduct === item.id
+            );
             if (billItem) {
                 return {
                     ...item,
@@ -98,7 +100,10 @@ const library = (() => {
         for (let i = 0; i < dataDistrictLength; i++) {
             if (dataDistrict[i].province_code == codeProvince) {
                 dataDistrictFilter.push(dataDistrict[i]);
-                if (dataDistrict[i + 1].province_code != codeProvince) {
+                if (
+                    i === dataDistrictLength - 1 ||
+                    dataDistrict[i + 1].province_code != codeProvince
+                ) {
                     return dataDistrictFilter;
                     // optimize code
                 }
@@ -114,7 +119,10 @@ const library = (() => {
         for (let i = 0; i < dataWardLength; i++) {
             if (dataWard[i].district_code == codeDistrict) {
                 dataWardFilter.push(dataWard[i]);
-                if (dataWard[i + 1].district_code != codeDistrict) {
+                if (
+                    i === dataWardLength - 1 ||
+                    dataWard[i + 1].district_code != codeDistrict
+                ) {
                     return dataWardFilter;
                     // optimize code
                 }
